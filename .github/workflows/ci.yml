@@ -32,8 +32,6 @@ jobs:
       - name: Notify Slack
         run: |
           curl -X POST \
-          -H 'Content-type: application/json' \
-          --data '{
-            "text": "✅ CI Pipeline SUCCESS for devops-webapp\nTriggered by GitHub Actions"
-          }' \
-          ${{ secrets.SLACK_WEBHOOK }}
+          -H "Content-type: application/json" \
+          --data "{\"text\":\"✅ CI Pipeline SUCCESS for DevOps WebApp 🚀\"}" \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
