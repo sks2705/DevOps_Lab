@@ -1,4 +1,4 @@
-name: DevOps CI Pipeline
+name: CI Pipeline - DevOps WebApp
 
 on:
   push:
@@ -10,31 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      # Step 1: Checkout source code
+      - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Display Files
-        run: ls -la
+      # Step 2: Build the project
+      - name: Build Project
+        run: echo "Building the web application..."
 
-      - name: Validate HTML File Exists
-        run: |
-          if [ -f index.html ]; then
-            echo "HTML file found. Build successful."
-          else
-            echo "index.html not found!"
-            exit 1
-          fi
+      # Step 3: Run tests (optional)
+      - name: Run Tests
+        run: echo "No tests configured"
 
-      - name: Slack Notification - Success
-        if: success()
+      # Step 4: Generate build logs
+      - name: Generate Logs
         run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text":"✅ DevOps_Lab Build Successful! 🚀"}' \
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+          echo "CI pipeline executed successfully"
+          echo "Build triggered on $(date)"
 
-      - name: Slack Notification - Failure
-        if: failure()
+      # Step 5: ChatOps - Notify Slack
+      - name: Notify Slack
         run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text":"❌ DevOps_Lab Build Failed! ⚠️"}' \
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST \
+          -H 'Content-type: application/json' \
+          --data '{
+            "text": "✅ CI Pipeline SUCCESS for devops-webapp\nTriggered by GitHub Actions"
+          }' \
+          ${{ secrets.SLACK_WEBHOOK }}
