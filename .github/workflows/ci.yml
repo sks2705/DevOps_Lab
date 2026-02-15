@@ -1,0 +1,40 @@
+name: DevOps CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Display Files
+        run: ls -la
+
+      - name: Validate HTML File Exists
+        run: |
+          if [ -f index.html ]; then
+            echo "HTML file found. Build successful."
+          else
+            echo "index.html not found!"
+            exit 1
+          fi
+
+      - name: Slack Notification - Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"✅ DevOps_Lab Build Successful! 🚀"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Slack Notification - Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"❌ DevOps_Lab Build Failed! ⚠️"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
